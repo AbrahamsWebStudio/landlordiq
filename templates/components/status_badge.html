@@ -1,0 +1,11 @@
+{% if status == "overdue" %}
+    <span class="inline-block px-2 py-0.5 rounded-full text-xs font-medium bg-ui-danger/10 text-ui-danger">Overdue</span>
+{% elif status == "paid" %}
+    <span class="inline-block px-2 py-0.5 rounded-full text-xs font-medium bg-ui-success/10 text-ui-success">Paid</span>
+{% elif status == "pending" %}
+    <span class="inline-block px-2 py-0.5 rounded-full text-xs font-medium bg-ui-warning/10 text-ui-warning">Pending</span>
+{% elif status == "active" %}
+    <span class="inline-block px-2 py-0.5 rounded-full text-xs font-medium bg-ui-info/10 text-ui-info">Active</span>
+{% else %}
+    <span class="inline-block px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-600">{{ status }}</span>
+{% endif %}

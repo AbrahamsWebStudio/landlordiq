@@ -1,0 +1,22 @@
+<div class="bg-white rounded-xl p-4 shadow-sm hover:shadow-md transition">
+    <div class="flex justify-between items-start mb-2">
+        <h3 class="font-bold text-gray-800">{{ property.name }}</h3>
+        <span class="bg-green-100 text-green-700 px-2 py-0.5 rounded-full text-xs font-medium">Active</span>
+    </div>
+    <div class="flex items-center gap-1 mb-3">
+        <i data-lucide="map-pin" class="w-3.5 h-3.5 text-gray-400"></i>
+        <span class="text-xs text-gray-500">{{ property.location|truncatechars:30 }}</span>
+    </div>
+    <div class="grid grid-cols-2 gap-2 text-sm mb-3">
+        <div><span class="text-gray-500">Units</span><br><span class="font-medium">{{ property.total_units }}</span></div>
+        <div><span class="text-gray-500">Occupied</span><br><span class="font-medium">{{ property.occupied_units }}</span></div>
+        <div><span class="text-gray-500">Revenue</span><br><span class="font-medium">KES {{ property.monthly_revenue|floatformat:0 }}</span></div>
+        <div><span class="text-gray-500">Occupancy</span><br><span class="font-medium {% if property.occupancy_rate >= 80 %}text-green-600{% else %}text-orange-500{% endif %}">{{ property.occupancy_rate }}%</span></div>
+    </div>
+    <div class="flex gap-2">
+        <a href="{% url 'properties:property_detail' property.id %}" class="flex-1 bg-[#2D5A27] text-white text-center py-2 rounded-lg text-sm font-medium">View Details</a>
+        <button class="menu-btn w-10 h-10 border border-gray-200 rounded-lg flex items-center justify-center" data-property-id="{{ property.id }}" data-property-name="{{ property.name|escapejs }}">
+            <i data-lucide="more-horizontal" class="w-4 h-4 text-gray-500"></i>
+        </button>
+    </div>
+</div>

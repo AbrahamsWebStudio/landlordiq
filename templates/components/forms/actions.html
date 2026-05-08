@@ -1,0 +1,17 @@
+<div class="flex gap-3">
+    
+    <button
+        type="submit"
+        class="bg-[#2D5A27] text-white px-6 py-2 rounded-lg text-sm font-medium hover:bg-[#1e3a1e] transition"
+    >
+        {{ submit_text|default:"Save" }}
+    </button>
+
+    <a
+        href="{{ cancel_url }}"
+        class="bg-gray-500 text-white px-6 py-2 rounded-lg text-sm font-medium hover:bg-gray-600 transition"
+    >
+        Cancel
+    </a>
+
+</div>

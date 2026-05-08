@@ -1,0 +1,63 @@
+/** @type {import('tailwindcss').Config} */
+module.exports = {
+  content: [
+    './templates/**/*.html',
+    '**/templates/**/*.html',
+  ],
+  safelist: [
+    'bg-bg-primary',
+    'bg-bg-card',
+    'bg-bg-sidebar',
+    'bg-bg-hover',
+    'text-text-primary',
+    'text-text-secondary',
+    'text-text-muted',
+    'text-text-white',
+    'ui-success',
+    'ui-danger',
+    'ui-warning',
+    'ui-info',
+    'rounded-card',
+    'rounded-button',
+    'shadow-card',
+    'shadow-card-hover',
+    'shadow-dropdown',
+  ],
+  theme: {
+    extend: {
+      colors: {
+        'bg-primary': '#d4e8d2',
+        'bg-card': '#FFFFFF',
+        'bg-sidebar': '#1a2e1a',
+        'bg-hover': '#e8f5e6',
+        'text-primary': '#1a2e1a',
+        'text-secondary': '#5a7a5a',
+        'text-muted': '#a3c9a0',
+        'text-white': '#FFFFFF',
+        'ui-success': '#4CAF50',
+        'ui-danger': '#e63946',
+        'ui-warning': '#f4a261',
+        'ui-info': '#175281',
+      },
+      fontSize: {
+        'heading-1': ['36px', { lineHeight: '44px', fontWeight: '700' }],
+        'heading-2': ['30px', { lineHeight: '38px', fontWeight: '700' }],
+        'heading-3': ['24px', { lineHeight: '32px', fontWeight: '600' }],
+        'body-large': ['18px', { lineHeight: '28px', fontWeight: '400' }],
+        'body-base': ['16px', { lineHeight: '24px', fontWeight: '400' }],
+        'body-small': ['14px', { lineHeight: '20px', fontWeight: '400' }],
+        'caption': ['13px', { lineHeight: '18px', fontWeight: '400' }],
+      },
+      borderRadius: {
+        'card': '12px',
+        'button': '8px',
+      },
+      boxShadow: {
+        'card': '0 1px 3px 0 rgb(0 0 0 / 0.05)',
+        'card-hover': '0 8px 24px -6px rgb(0 0 0 / 0.12)',
+        'dropdown': '0 10px 15px -3px rgb(0 0 0 / 0.08)',
+      },
+    },
+  },
+  plugins: [],
+}

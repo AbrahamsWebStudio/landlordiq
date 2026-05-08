@@ -1,0 +1,62 @@
+<aside id="sidebar" class="hidden lg:flex fixed top-0 left-0 w-64 h-full flex-col py-6 px-4 z-50 transition-transform" style="background:#1a2e1a;">
+    <div class="flex justify-end lg:hidden mb-4">
+        <button id="closeSidebarBtn" class="text-white hover:text-gray-300">
+            <i data-lucide="x" class="w-6 h-6"></i>
+        </button>
+    </div>
+    
+    <h2 class="text-white font-bold text-xl mb-8 px-3">LandlordIQ</h2>
+    <nav class="flex-1 space-y-1">
+        <a href="/dashboard" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-white bg-[#2D5A27]">
+            <i data-lucide="layout-dashboard" class="w-4 h-4"></i>
+            <span>Dashboard</span>
+        </a>
+        <a href="/properties" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-[#a3c9a0] hover:bg-[#2D5A27]/30">
+            <i data-lucide="building" class="w-4 h-4"></i>
+            <span>Properties</span>
+        </a>
+        <a href="/tenants" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-[#a3c9a0] hover:bg-[#2D5A27]/30">
+            <i data-lucide="users" class="w-4 h-4"></i>
+            <span>Tenants</span>
+        </a>
+        <a href="/payments" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-[#a3c9a0] hover:bg-[#2D5A27]/30">
+            <i data-lucide="credit-card" class="w-4 h-4"></i>
+            <span>Payments</span>
+        </a>
+        <a href="/maintenance" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-[#a3c9a0] hover:bg-[#2D5A27]/30">
+            <i data-lucide="wrench" class="w-4 h-4"></i>
+            <span>Maintenance</span>
+        </a>
+    </nav>
+</aside>
+
+<script>
+    const sidebar = document.getElementById('sidebar');
+    const hamburgerBtn = document.getElementById('hamburgerBtn');
+    const closeSidebarBtn = document.getElementById('closeSidebarBtn');
+    
+    if (hamburgerBtn) {
+        hamburgerBtn.addEventListener('click', function() {
+            sidebar.classList.remove('hidden');
+            sidebar.classList.add('flex');
+        });
+    }
+    
+    if (closeSidebarBtn) {
+        closeSidebarBtn.addEventListener('click', function() {
+            sidebar.classList.add('hidden');
+            sidebar.classList.remove('flex');
+        });
+    }
+    
+    document.addEventListener('click', function(event) {
+        if (window.innerWidth < 1024) {
+            if (sidebar && !sidebar.classList.contains('hidden')) {
+                if (!sidebar.contains(event.target) && !hamburgerBtn?.contains(event.target)) {
+                    sidebar.classList.add('hidden');
+                    sidebar.classList.remove('flex');
+                }
+            }
+        }
+    });
+</script>

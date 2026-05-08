@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Stats Grid -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+    {% include "components/stat_card.html" with label="Monthly Revenue" value=stats.collected color="green-500" icon="trending-up" trend="+12% from April" trend_color="green-600" %}
+    {% include "components/stat_card.html" with label="Unpaid Invoices" value=stats.outstanding color="red-500" icon="alert-circle" trend=outstanding_count|stringformat:"s"|add:" invoices pending" trend_color="red-600" %}
+    {% include "components/stat_card.html" with label="Active Tenants" value=stats.total_tenants color="[#2D5A27]" icon="users" trend=expiring_leases|stringformat:"s"|add:" leases expiring" trend_color="[#2D5A27]" %}
+    {% include "components/stat_card.html" with label="Maintenance Pending" value=stats.maintenance_pending color="orange-500" icon="wrench" trend="2 urgent requests" trend_color="orange-600" %}
+</div>
+
+<!-- Chart and Recent Payments Row -->
+<div class="grid grid-cols-1 lg:grid-cols-5 gap-6 mb-6">
+    <!-- Chart Component -->
+    <div class="lg:col-span-3">
+        {% include "dashboard/components/chart.html" with bars=chart_bars %}
+    </div>
+    
+    <!-- Recent Payments Component -->
+    <div class="lg:col-span-2">
+        {% include "dashboard/components/recent_payments.html" with payments=payments_feed %}
+    </div>
+</div>
+
+<!-- Overdue Tenants Component -->
+{% include "dashboard/components/overdue_table.html" with tenants=overdue_tenants %}
+{% endblock %}

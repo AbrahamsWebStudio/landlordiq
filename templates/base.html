@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>{% block title %}LandlordIQ{% endblock %}</title>
+    
+    <link rel="stylesheet" href="{% static 'css/output.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+    
+    <style>
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .fade-up { animation: fadeUp 0.4s ease-out both; }
+    </style>
+    {% block extra_head %}{% endblock %}
+</head>
+<body class="bg-bg-primary pb-16 lg:pb-0">
+    {% include "components/sidebar.html" %}
+    {% include "components/mobile_bottom_nav.html" %}
+    {% include "components/action_sheet.html" %}
+    
+    <main class="lg:ml-64">
+        {% include "components/topbar.html" %}
+        <div class="p-4 lg:p-6"><div class="max-w-7xl mx-auto">
+            {% block content %}{% endblock %}
+        </div>
+    </main>
+    
+    <script>lucide.createIcons();</script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

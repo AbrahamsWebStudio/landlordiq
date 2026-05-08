@@ -1,0 +1,16 @@
+<tr class="hover:bg-gray-50">
+    <td class="py-3 text-sm text-gray-800">Unit {{ unit.unit_number }}</td>
+    <td class="py-3 text-sm">
+        {% if unit.is_occupied %}
+        <span class="bg-green-100 text-green-700 px-2 py-1 rounded text-xs font-medium">Occupied</span>
+        {% else %}
+        <span class="bg-gray-100 text-gray-600 px-2 py-1 rounded text-xs font-medium">Vacant</span>
+        {% endif %}
+    </td>
+    <td class="py-3 text-sm font-medium text-gray-800">KES {{ unit.default_rent|floatformat:0 }}</td>
+    <td class="py-3">
+        <button class="text-blue-600 hover:text-blue-800">
+            <i data-lucide="eye" class="w-4 h-4"></i>
+        </button>
+    </td>
+</tr>

@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block page_title %}Properties{% endblock %}
+{% block page_subtitle %}{{ today|date:"l, d F Y" }}{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto">
+    <!-- Breadcrumb -->
+    {% include "components/breadcrumb.html" %}
+    
+    <!-- Header with Search/Filter (left) and Add Button (right) -->
+    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+        <div>
+            <h1 class="text-2xl font-bold text-gray-800">Properties</h1>
+            <p class="text-sm text-gray-500 mt-1">Manage your real estate portfolio</p>
+        </div>
+        <div class="flex items-center gap-3">
+            <!-- Search & Filter Component -->
+            {% include "components/search_filter.html" %}
+            
+            <!-- Add Button Component (Desktop - hidden on mobile) -->
+            <div class="hidden sm:block">
+                {% include "components/add_button.html" with url="/properties/add/" button_text="Add Property" %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Stats Row -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+        {% for stat in stats %}
+            {% include "components/stat_card.html" with icon=stat.icon icon_color=stat.icon_color value=stat.value label=stat.label trend=stat.trend trend_color=stat.trend_color %}
+        {% endfor %}
+    </div>
+
+    <!-- Properties Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {% for property in properties %}
+            {% include "properties/components/property_card.html" with property=property %}
+        {% empty %}
+            <div class="col-span-full text-center py-12 text-gray-500">No properties yet.</div>
+        {% endfor %}
+    </div>
+
+    {% include "properties/components/property_action_sheet.html" %}
+</div>
+
+<!-- Floating Add Button for Mobile (visible only on mobile) -->
+<div class="sm:hidden fixed bottom-20 right-4 z-30">
+    <a href="{% url 'properties:property_add' %}" class="w-14 h-14 rounded-full bg-[#2D5A27] text-white flex items-center justify-center shadow-lg hover:bg-[#1e3a1e] transition">
+        <i data-lucide="plus" class="w-6 h-6"></i>
+    </a>
+</div>
+
+<script>
+    document.querySelectorAll('.menu-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const propertyId = this.dataset.propertyId;
+            const propertyName = this.dataset.propertyName;
+            if (typeof openPropertySheet === 'function') {
+                openPropertySheet(propertyId, propertyName);
+            }
+        });
+    });
+</script>
+{% endblock %}

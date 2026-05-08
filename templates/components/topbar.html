@@ -1,0 +1,102 @@
+<header class="bg-white border-b border-gray-200 sticky top-0 z-30">
+    <div class="flex items-center justify-between px-4 lg:px-6 py-4">
+        <div class="flex items-center gap-4">
+            <div class="lg:hidden">
+                <button id="hamburgerBtn" class="text-gray-700 focus:outline-none">
+                    <i data-lucide="menu" class="w-6 h-6"></i>
+                </button>
+            </div>
+            <div>
+                <h1 class="text-heading-2 text-text-primary">{{ page_title|default:"Dashboard" }}</h1>
+                <p class="text-caption text-text-muted">{{ page_subtitle|default:"" }}</p>
+            </div>
+        </div>
+        <div class="flex items-center gap-4">
+            <!-- Notification Bell -->
+            <div class="relative">
+                <button id="notificationBtn" class="relative focus:outline-none flex items-center justify-center">
+                    <i data-lucide="bell" class="w-5 h-5 text-text-secondary"></i>
+                    <span class="absolute -top-1 -right-1 w-2 h-2 bg-ui-danger rounded-full"></span>
+                </button>
+                <div id="notificationDropdown" class="hidden absolute top-full mt-2 w-80 bg-bg-card rounded-card shadow-dropdown border border-border-light z-50" style="right: -20px; left: auto;">
+                    <div class="p-3 border-b border-border-light">
+                        <h3 class="text-body-base font-semibold text-text-primary">Notifications</h3>
+                    </div>
+                    <div class="max-h-96 overflow-y-auto">
+                        <div class="p-3 hover:bg-bg-hover cursor-pointer">
+                            <p class="text-body-small text-text-primary">New payment received</p>
+                            <p class="text-caption text-text-muted mt-1">Just now</p>
+                        </div>
+                        <div class="p-3 hover:bg-bg-hover cursor-pointer">
+                            <p class="text-body-small text-text-primary">Maintenance request #123</p>
+                            <p class="text-caption text-text-muted mt-1">2 hours ago</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Profile Menu -->
+            <div class="relative">
+                <button id="profileBtn" class="focus:outline-none">
+                    <div class="w-8 h-8 lg:w-9 lg:h-9 rounded-full bg-ui-info flex items-center justify-center text-text-white text-body-small font-bold">
+                        {{ request.user.username|slice:":1"|upper|default:"K" }}
+                    </div>
+                </button>
+                <div id="profileDropdown" class="hidden absolute top-full right-0 mt-2 w-48 bg-bg-card rounded-card shadow-dropdown border border-border-light z-50">
+                    <div class="py-2">
+                        <a href="#" class="block px-4 py-2 text-body-small text-text-primary hover:bg-bg-hover">
+                            <i data-lucide="user" class="w-4 h-4 inline mr-2"></i> Profile
+                        </a>
+                        <a href="#" class="block px-4 py-2 text-body-small text-text-primary hover:bg-bg-hover">
+                            <i data-lucide="settings" class="w-4 h-4 inline mr-2"></i> Settings
+                        </a>
+                        <hr class="my-1 border-border-light">
+                        <a href="{% url 'logout' %}" class="block px-4 py-2 text-body-small text-ui-danger hover:bg-bg-hover">
+                            <i data-lucide="log-out" class="w-4 h-4 inline mr-2"></i> Logout
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const hamburgerBtn = document.getElementById('hamburgerBtn');
+        const sidebar = document.getElementById('sidebar');
+        const notificationBtn = document.getElementById('notificationBtn');
+        const notificationDropdown = document.getElementById('notificationDropdown');
+        const profileBtn = document.getElementById('profileBtn');
+        const profileDropdown = document.getElementById('profileDropdown');
+        
+        if (hamburgerBtn && sidebar) {
+            hamburgerBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                sidebar.classList.toggle('hidden');
+                sidebar.classList.toggle('flex');
+            });
+        }
+        
+        if (notificationBtn && notificationDropdown) {
+            notificationBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                notificationDropdown.classList.toggle('hidden');
+                if (profileDropdown) profileDropdown.classList.add('hidden');
+            });
+        }
+        
+        if (profileBtn && profileDropdown) {
+            profileBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                profileDropdown.classList.toggle('hidden');
+                if (notificationDropdown) notificationDropdown.classList.add('hidden');
+            });
+        }
+        
+        document.addEventListener('click', function() {
+            if (notificationDropdown) notificationDropdown.classList.add('hidden');
+            if (profileDropdown) profileDropdown.classList.add('hidden');
+        });
+    });
+</script>

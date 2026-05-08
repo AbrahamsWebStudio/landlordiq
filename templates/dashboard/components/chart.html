@@ -1,0 +1,15 @@
+<div class="bg-white rounded-xl p-5 shadow-sm">
+    <h3 class="font-bold text-gray-800 mb-1">Rent Collection Trend</h3>
+    <p class="text-sm text-gray-500 mb-4">Last 6 months</p>
+    <div class="flex items-end justify-between gap-3" style="height: 200px;">
+        {% for bar in bars %}
+        <div class="flex flex-col items-center flex-1">
+            <div class="w-full rounded-t transition hover:opacity-80" style="background: {{ bar.color }}; height: {{ bar.height }};"></div>
+            <span class="text-xs text-gray-500 mt-2">{{ bar.label }}</span>
+            <span class="text-xs font-medium text-gray-600 mt-1">{{ bar.value }}</span>
+        </div>
+        {% empty %}
+        <div class="text-center text-gray-500 py-8">No data available</div>
+        {% endfor %}
+    </div>
+</div>

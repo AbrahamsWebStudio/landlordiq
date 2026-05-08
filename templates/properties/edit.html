@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block page_title %}Edit Property{% endblock %}
+{% block page_subtitle %}{{ today|date:"l, d F Y" }}{% endblock %}
+
+{% block content %}
+
+{% include "components/breadcrumb.html" %}
+
+<div class="max-w-2xl mx-auto">
+    <div class="bg-white rounded-xl p-6 shadow-sm">
+
+        <h2 class="text-2xl font-bold text-gray-800 mb-6">
+            Edit Property
+        </h2>
+
+        <form method="POST">
+            {% csrf_token %}
+            {% include "components/forms/input.html" with label="Property Name" name="name" value=property.name required=True %}
+
+            {% include "components/forms/textarea.html" with label="Address" name="address" value=property.address required=True %}
+
+            {% include "components/forms/select.html" with label="Status" name="status" selected=property.status options=status_options %}
+            
+            {% include "components/forms/actions.html" with submit_text="Update Property" cancel_url="/properties/{{ property.id }}/" %}
+        </form>
+
+    </div>
+</div>
+
+{% endblock %}

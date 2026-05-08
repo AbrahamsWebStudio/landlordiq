@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block page_title %}Add Property{% endblock %}
+{% block page_subtitle %}{{ today|date:"l, d F Y" }}{% endblock %}
+
+{% block content %}
+
+{% include "components/breadcrumb.html" %}
+
+<div class="max-w-2xl mx-auto">
+    <div class="bg-white rounded-xl p-6 shadow-sm">
+        <h2 class="text-2xl font-bold text-gray-800 mb-6">Add New Property</h2>
+        <form method="POST">
+            {% csrf_token %}
+
+            {% include "components/forms/input.html" with label="Property Name" name="name" required=True %}
+
+            {% include "components/forms/textarea.html" with label="Address" name="address" required=True %}
+
+            {% include "components/forms/actions.html" with submit_text="Save Property" cancel_url="/properties/" %}
+        </form>
+    </div>
+</div>
+{% endblock %}
