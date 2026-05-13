@@ -206,3 +206,22 @@ Notes
 - The app will attempt to use the local `static/vendor/lucide.min.js` and `static/fonts/*` first. If the fonts are not loaded, the page will fall back to Google Fonts automatically.
 - Add the actual font files (woff2) and the `lucide.min.js` file before creating your final production commit so the site does not depend on the CDN.
 
+MPesa webhook hardening
+-----------------------
+
+We implemented idempotency and optional payload verification in the MPesa callback handler. Follow these rules when deploying and testing:
+
+- Idempotency: the webhook handler checks for an existing `Payment` with the same MPesa receipt (`mpesa_code`) and will not create duplicates. This avoids double-crediting when Safaricom retries callbacks.
+- Atomicity: database writes are wrapped in a transaction to avoid race conditions when multiple callbacks arrive concurrently.
+- Optional HMAC verification: Set `MPESA_CALLBACK_SECRET` in your `.env` to enable request signature verification. When present the callback handler expects a signature header (common names tried: `X-MPESA-SIGNATURE`, `X-Hub-Signature`, `X-Signature`) and validates an HMAC-SHA256 of the raw request body. If your Safaricom/relay provides a different header name or signing method, update the handler accordingly.
+
+Environment example for HMAC verification (add to `.env`):
+
+```
+MPESA_CALLBACK_SECRET=your_long_random_secret
+```
+
+If you do not have a signing secret available from Safaricom, leave `MPESA_CALLBACK_SECRET` unset — the handler will only perform idempotency and logging.
+
+Operational note: If you detect duplicate or missing payments in production, inspect webhook logs and the `payments_payment` table for entries with the same `mpesa_code` or notes referencing the checkout id.
+

@@ -1,45 +1,43 @@
-/*
- Local fonts loader for DM Sans.
+/* Local fonts loader for DM Sans.
 
- To host Google font locally:
- 1. Download DM Sans woff2 files (400,500,600,700) and place them under `static/fonts/`.
- 2. Uncomment and adapt the @font-face rules below to point to the downloaded files.
+To host Google font locally:
+1. Download DM Sans woff2 files (400,500,600,700) and place them under `static/fonts/`.
+2. Uncomment and adapt the @font-face rules below to point to the downloaded files.
 
- Example @font-face (uncomment and update paths when you add the files):
+Example @font-face (uncomment and update paths when you add the files): */
 
- @font-face {
-   font-family: 'DM Sans';
-   src: url('/static/fonts/DM-Sans-Regular.woff2') format('woff2');
-   font-weight: 400;
-   font-style: normal;
-   font-display: swap;
- }
+@font-face {
+  font-family: 'DM Sans';
+  src: url('/static/fonts/DM_Sans/static/DMSans-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
 
- @font-face {
-   font-family: 'DM Sans';
-   src: url('/static/fonts/DM-Sans-Medium.woff2') format('woff2');
-   font-weight: 500;
-   font-style: normal;
-   font-display: swap;
- }
+@font-face {
+  font-family: 'DM Sans';
+  src: url('/static/fonts/DM_Sans/static/DMSans-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
 
- @font-face {
-   font-family: 'DM Sans';
-   src: url('/static/fonts/DM-Sans-SemiBold.woff2') format('woff2');
-   font-weight: 600;
-   font-style: normal;
-   font-display: swap;
- }
+@font-face {
+  font-family: 'DM Sans';
+  src: url('/static/fonts/DM_Sans/static/DMSans-SemiBold.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
 
- @font-face {
-   font-family: 'DM Sans';
-   src: url('/static/fonts/DM-Sans-Bold.woff2') format('woff2');
-   font-weight: 700;
-   font-style: normal;
-   font-display: swap;
- }
+@font-face {
+  font-family: 'DM Sans';
+  src: url('/static/fonts/DM_Sans/static/DMSans-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
 
-*/
 
 /* Fallback stack until fonts are hosted locally. */
 body, input, select, textarea, button {

@@ -1,4 +1,9 @@
 import json
+import hmac
+import hashlib
+import base64
+from decimal import Decimal
+
 from django.http import JsonResponse, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
@@ -13,6 +18,8 @@ from io import BytesIO
 from django.template.loader import get_template
 from xhtml2pdf import pisa
 from django.urls import reverse
+from django.db import transaction, IntegrityError
+from decouple import config
 
 
 logger = logging.getLogger(__name__)
@@ -74,32 +81,70 @@ def initiate_payment(request, invoice_id):
 def mpesa_callback(request):
     # Safaricom sends a POST request
     if request.method == 'POST':
+        # Optional: verify HMAC signature if MPESA_CALLBACK_SECRET is set in env
+        secret = config('MPESA_CALLBACK_SECRET', default=None)
         try:
-            data = json.loads(request.body)
-            result_code = data['Body']['stkCallback']['ResultCode']
-            
-            if result_code == 0:  # Success
-                metadata = data['Body']['stkCallback']['CallbackMetadata']['Item']
-                
-                # Extract details
-                receipt = next(item['Value'] for item in metadata if item['Name'] == 'MpesaReceiptNumber')
-                amount = next(item['Value'] for item in metadata if item['Name'] == 'Amount')
-                checkout_id = data['Body']['stkCallback']['CheckoutRequestID']
-                
-                # Find the invoice by checkout id
-                invoice = Invoice.objects.get(mpesa_checkout_id=checkout_id)
+            if secret:
+                # Common header names that might contain a signature
+                sig_header = None
+                for h in ('HTTP_X_MPESA_SIGNATURE', 'HTTP_X_HUB_SIGNATURE', 'HTTP_X_SIGNATURE', 'HTTP_X_MPESA_SIGN'):
+                    if h in request.META:
+                        sig_header = request.META.get(h)
+                        break
+                if not sig_header:
+                    logger.warning('MPesa callback missing signature header')
+                    return JsonResponse({"ResultCode": 1, "ResultDesc": "Missing signature"}, status=400)
 
-                # Create payment — Payment.save() will recalculate invoice.amount_paid and status
-                Payment.objects.create(
-                    invoice=invoice,
-                    amount=amount,
-                    mpesa_code=receipt,
-                    is_confirmed=True
-                )
-            
+                computed = base64.b64encode(hmac.new(secret.encode(), request.body, hashlib.sha256).digest()).decode()
+                if not hmac.compare_digest(computed, sig_header):
+                    logger.warning('MPesa callback signature mismatch')
+                    return JsonResponse({"ResultCode": 1, "ResultDesc": "Invalid signature"}, status=400)
+
+            data = json.loads(request.body)
+            result_code = data.get('Body', {}).get('stkCallback', {}).get('ResultCode')
+
+            if result_code == 0:  # Success
+                metadata = data.get('Body', {}).get('stkCallback', {}).get('CallbackMetadata', {}).get('Item', [])
+
+                # Safely extract receipt and amount
+                receipt = next((item.get('Value') for item in metadata if item.get('Name') == 'MpesaReceiptNumber'), None)
+                amount = next((item.get('Value') for item in metadata if item.get('Name') == 'Amount'), None)
+                checkout_id = data.get('Body', {}).get('stkCallback', {}).get('CheckoutRequestID')
+
+                if not receipt or amount is None or not checkout_id:
+                    logger.warning('MPesa callback missing expected fields: receipt=%s amount=%s checkout_id=%s', receipt, amount, checkout_id)
+                    return JsonResponse({"ResultCode": 1, "ResultDesc": "Missing fields"}, status=400)
+
+                try:
+                    invoice = Invoice.objects.get(mpesa_checkout_id=checkout_id)
+                except Invoice.DoesNotExist:
+                    logger.warning('MPesa callback: no invoice for checkout id %s', checkout_id)
+                    return JsonResponse({"ResultCode": 0, "ResultDesc": "Accepted"})
+
+                # Idempotency: ensure we do not create duplicate payments for same Mpesa receipt.
+                try:
+                    with transaction.atomic():
+                        if Payment.objects.filter(mpesa_code=receipt).exists():
+                            logger.info('Duplicate MPesa callback received for receipt %s', receipt)
+                            return JsonResponse({"ResultCode": 0, "ResultDesc": "Accepted"})
+
+                        # Persist the payment
+                        Payment.objects.create(
+                            invoice=invoice,
+                            amount=Decimal(str(amount)),
+                            mpesa_code=receipt,
+                            is_confirmed=True,
+                            notes=f"checkout:{checkout_id}"
+                        )
+                except IntegrityError:
+                    # Another worker created it concurrently — treat as success
+                    logger.info('IntegrityError when creating payment for receipt %s — likely duplicate', receipt)
+                    return JsonResponse({"ResultCode": 0, "ResultDesc": "Accepted"})
+
             return JsonResponse({"ResultCode": 0, "ResultDesc": "Accepted"})
-        except Exception as e:
-            # Even if our logic fails, we tell Safaricom 'Success' so they stop retrying
+        except Exception:
+            logger.exception('Error processing MPesa callback')
+            # Tell Safaricom we accepted the callback to stop retries; but we logged details for investigation
             return JsonResponse({"ResultCode": 0, "ResultDesc": "Error but received"})
 
     # If someone tries a GET request (like you just did), return a 405

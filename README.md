@@ -62,6 +62,51 @@ templates/
 
 ## ⚙️ Setup Instructions
 
+## Environment & Local Seed (recommended)
+
+1. Copy environment example and fill values (DO NOT commit a real `.env` file):
+
+```bash
+cp .env.example .env
+# edit .env and set database, SECRET_KEY and MPESA credentials
+```
+
+2. Optional: enable MPesa callback HMAC verification by adding a secret:
+
+```
+MPESA_CALLBACK_SECRET=some-long-random-secret
+```
+
+3. Run migrations and collect static files:
+
+```bash
+python manage.py migrate --noinput
+python manage.py collectstatic --noinput
+```
+
+4. Seed local test data (creates a superuser, property, unit, tenant and invoice):
+
+```bash
+python manage.py seed_test_data
+```
+
+Seed defaults are driven from environment variables (see `.env.example`). This allows the seeding script to be parameterized in CI or dev environments.
+
+5. Run the dev server:
+
+```bash
+python manage.py runserver
+```
+
+6. Tests (optional):
+
+```bash
+python manage.py test
+```
+
+Security reminder: Never commit `.env` or secrets. Use `.env.example` for onboarding and set real secrets in your deployment environment or secret manager.
+
+
 ### 1. Clone repository
 ```bash
 git clone https://github.com/YOUR_USERNAME/landlordiq.git
