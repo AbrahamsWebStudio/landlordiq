@@ -21,7 +21,8 @@
             
             <!-- Add Button Component (Desktop - hidden on mobile) -->
             <div class="hidden sm:block">
-                {% include "components/add_button.html" with url="/properties/add/" button_text="Add Property" %}
+                {% url 'properties:property_add' as add_property_url %}
+                {% include "components/add_button.html" with url=add_property_url button_text="Add Property" %}
             </div>
         </div>
     </div>

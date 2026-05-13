@@ -12,11 +12,13 @@ from urllib.parse import quote
 from io import BytesIO
 from django.template.loader import get_template
 from xhtml2pdf import pisa
+from django.urls import reverse
 
 
 logger = logging.getLogger(__name__)
 
 
+@login_required
 def initiate_payment(request, invoice_id):
     """
     This view is triggered when the tenant clicks 'Pay'.
@@ -25,13 +27,26 @@ def initiate_payment(request, invoice_id):
     invoice = get_object_or_404(Invoice, id=invoice_id)
     client = MpesaClient()
     
-    # In a real app, get the phone from the tenant profile
-    # For now, we can use a hardcoded test number or pass it in
-    phone = "254795285363" 
-    # amount = invoice.total_amount
-    amount = 1  # For testing, use a small amount to avoid real charges    
-    # The callback URL must be your public address
-    callback_url = "https://d7c7-41-90-145-32.ngrok-free.app/payments/callback/"
+    # Determine the phone number from the tenant profile
+    tenant = getattr(invoice.lease, 'tenant', None)
+    if not tenant or not getattr(tenant, 'phone_number', None):
+        return JsonResponse({"status": "error", "message": "Tenant phone number unavailable"}, status=400)
+
+    phone = tenant.phone_number.strip()
+    # Normalize formats: +2547..., 07..., 2547...
+    if phone.startswith('+'):
+        phone = phone[1:]
+    if phone.startswith('0'):
+        phone = '254' + phone[1:]
+
+    # Amount should default to the invoice total amount
+    try:
+        amount = int(float(invoice.total_amount))
+    except Exception:
+        return JsonResponse({"status": "error", "message": "Invalid invoice amount"}, status=400)
+
+    # Build callback URL dynamically
+    callback_url = request.build_absolute_uri(reverse('payments:mpesa_callback'))
     reference = f"INV{invoice.id}"
 
     # 1. Trigger the STK Push
@@ -116,8 +131,6 @@ def download_receipt(request, invoice_id):
     if invoice.amount_paid <= 0:
         return HttpResponse("No payments found for this receipt.", status=400)
     
-    if invoice.lease.tenant != request.user:
-        return HttpResponse("Unauthorized", status=401)
 
     template = get_template('payments/receipt_pdf.html')
     context = {
@@ -166,7 +179,7 @@ def get_tenant_actions(request, tenant_id):
     Used by HTMX to populate the dashboard overlay.
     """
     # 1. Fetch the tenant or 404
-    from properties.models import Tenant
+    from tenants.models import Tenant
     tenant = get_object_or_404(Tenant, id=tenant_id)
     
     # 2. Get the active lease and unit

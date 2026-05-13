@@ -6,36 +6,49 @@ from utilities.models import ServiceCharge, UnitServiceSubscription
 from utilities.services import UtilityService
 from django.utils import timezone
 from datetime import timedelta
+from decouple import config
 
 class Command(BaseCommand):
     help = 'Seeds a complete test environment'
 
     def handle(self, *args, **kwargs):
-        # 1. Owner
+        # 1. Owner (use env-configured defaults when available)
         owner = User.objects.filter(is_superuser=True).first()
         if not owner:
-            owner = User.objects.create_superuser('admin', 'admin@example.com', 'admin123')
+            admin_user = config('SEED_ADMIN_USER', default='admin')
+            admin_email = config('SEED_ADMIN_EMAIL', default='admin@example.com')
+            admin_password = config('SEED_ADMIN_PASSWORD', default='admin123')
+            owner = User.objects.create_superuser(admin_user, admin_email, admin_password)
 
         # 2. Property
+        prop_name = config('SEED_PROPERTY_NAME', default='GDC Plaza')
+        prop_address = config('SEED_PROPERTY_ADDRESS', default='Kakamega Central')
         prop, _ = Property.objects.get_or_create(
-            name="GDC Plaza", 
-            defaults={'address': "Kakamega Central", 'owner': owner}
+            name=prop_name,
+            defaults={'address': prop_address, 'owner': owner}
         )
 
         # 3. Unit
+        unit_number = config('SEED_UNIT_NUMBER', default='Suite 101')
+        unit_rent = float(config('SEED_UNIT_RENT', default=25000.00))
         unit, _ = Unit.objects.get_or_create(
-            property=prop, 
-            unit_number="Suite 101",
-            defaults={'default_rent': 25000.00} 
+            property=prop,
+            unit_number=unit_number,
+            defaults={'default_rent': unit_rent}
         )
 
         # 4. Tenant
+        tenant_name = config('SEED_TENANT_NAME', default='John Doe')
+        tenant_email = config('SEED_TENANT_EMAIL', default='john@example.com')
+        tenant_phone = config('SEED_TENANT_PHONE', default='0712345678')
+        tenant_national_id = config('SEED_TENANT_NATIONAL_ID', default='12345678')
+
         tenant, _ = Tenant.objects.get_or_create(
-            full_name="John Doe", 
+            full_name=tenant_name,
             defaults={
-                'email': "john@example.com", 
-                'phone_number': "0712345678",
-                'national_id': "12345678"
+                'email': tenant_email,
+                'phone_number': tenant_phone,
+                'national_id': tenant_national_id
             }
         )
 

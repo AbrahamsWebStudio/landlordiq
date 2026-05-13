@@ -1,22 +1,22 @@
 <div class="lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-40 shadow-lg">
     <div class="flex justify-around py-2">
-        <a href="/dashboard" class="flex flex-col items-center p-2 rounded-lg text-[#2D5A27]">
+        <a href="{% url 'dashboard:dashboard' %}" class="flex flex-col items-center p-2 rounded-lg text-[#2D5A27]">
             <i data-lucide="home" class="w-5 h-5"></i>
             <span class="text-xs mt-1">Home</span>
         </a>
-        <a href="/properties" class="flex flex-col items-center p-2 rounded-lg text-gray-400">
+        <a href="{% url 'properties:property_list' %}" class="flex flex-col items-center p-2 rounded-lg text-gray-400">
             <i data-lucide="building" class="w-5 h-5"></i>
             <span class="text-xs mt-1">Properties</span>
         </a>
-        <a href="/tenants" class="flex flex-col items-center p-2 rounded-lg text-gray-400">
+        <a href="{% url 'tenants:tenant_list' %}" class="flex flex-col items-center p-2 rounded-lg text-gray-400">
             <i data-lucide="users" class="w-5 h-5"></i>
             <span class="text-xs mt-1">Tenants</span>
         </a>
-        <a href="/payments" class="flex flex-col items-center p-2 rounded-lg text-gray-400">
+        <a href="{% url 'payments:tenant_ledger' %}" class="flex flex-col items-center p-2 rounded-lg text-gray-400">
             <i data-lucide="credit-card" class="w-5 h-5"></i>
             <span class="text-xs mt-1">Payments</span>
         </a>
-        <a href="/maintenance" class="flex flex-col items-center p-2 rounded-lg text-gray-400">
+        <a href="{% url 'maintenance:index' %}" class="flex flex-col items-center p-2 rounded-lg text-gray-400">
             <i data-lucide="wrench" class="w-5 h-5"></i>
             <span class="text-xs mt-1">Maintenance</span>
         </a>

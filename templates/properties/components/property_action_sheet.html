@@ -42,6 +42,10 @@
 <script>
     let currentPropertyId = null;
     let currentPropertyName = '';
+    const detailUrlTemplate = "{% url 'properties:property_detail' 0 %}";
+    const editUrlTemplate = "{% url 'properties:property_edit' 0 %}";
+    const deleteUrlTemplate = "{% url 'properties:property_delete' 0 %}";
+    const listUrl = "{% url 'properties:property_list' %}";
     
     window.openPropertySheet = function(propertyId, propertyName) {
         currentPropertyId = propertyId;
@@ -55,16 +59,16 @@
         const editBtn = document.getElementById('propertyEditBtn');
         const deleteBtn = document.getElementById('propertyDeleteBtn');
         
-        if (viewBtn) viewBtn.href = `/properties/${propertyId}/`;
-        if (editBtn) editBtn.href = `/properties/${propertyId}/edit/`;
+        if (viewBtn) viewBtn.href = detailUrlTemplate.replace('0', propertyId);
+        if (editBtn) editBtn.href = editUrlTemplate.replace('0', propertyId);
         if (deleteBtn) {
             deleteBtn.onclick = function(e) {
                 e.preventDefault();
                 if (confirm(`Are you sure you want to delete "${propertyName}"?`)) {
-                    fetch(`/properties/${propertyId}/delete/`, { 
+                    fetch(deleteUrlTemplate.replace('0', propertyId), { 
                         method: 'POST', 
                         headers: { 'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]')?.value || '' 
-                    }}).then(() => window.location.href = '/properties/');
+                    }}).then(() => window.location.href = listUrl);
                 }
                 closePropertySheet();
             };
