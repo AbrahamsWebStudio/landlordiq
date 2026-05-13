@@ -1,3 +1,25 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtualenv
+venv/
+env/
+ENV/
+
+# Local env
+.env
+
+# VS Code / JetBrains
+.vscode/
+.idea/
+
+# Node
+node_modules/
+
+# Mac
+.DS_Store
 venv/
 __pycache__/
 *.pyc
