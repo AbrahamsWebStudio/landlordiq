@@ -1,20 +1,18 @@
 import requests
 import base64
-import os
 from datetime import datetime
-from dotenv import load_dotenv
+from decouple import config
 
-
-load_dotenv()
 
 class MpesaClient:
     def __init__(self):
-        # Using the standard Safaricom Sandbox 'Lipa Na M-Pesa Online' credentials
-        self.consumer_key = os.getenv("MPESA_CONSUMER_KEY")
-        self.consumer_secret = os.getenv("MPESA_CONSUMER_SECRET")
-        self.shortcode = os.getenv("MPESA_SHORTCODE")
-        self.passkey = os.getenv("MPESA_PASSKEY")
-        self.base_url = "https://sandbox.safaricom.co.ke"
+        # Read credentials and settings from environment via python-decouple
+        self.consumer_key = config('MPESA_CONSUMER_KEY', default='')
+        self.consumer_secret = config('MPESA_CONSUMER_SECRET', default='')
+        self.shortcode = config('MPESA_SHORTCODE', default='')
+        self.passkey = config('MPESA_PASSKEY', default='')
+        # Allow overriding the base URL (sandbox vs production)
+        self.base_url = config('MPESA_BASE_URL', default='https://sandbox.safaricom.co.ke')
         
     def get_token(self):
         url = f"{self.base_url}/oauth/v1/generate?grant_type=client_credentials"

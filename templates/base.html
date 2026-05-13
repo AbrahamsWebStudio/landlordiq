@@ -7,8 +7,46 @@
     <title>{% block title %}LandlordIQ{% endblock %}</title>
     
     <link rel="stylesheet" href="{% static 'css/output.css' %}">
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+    <link rel="stylesheet" href="{% static 'css/fonts.css' %}">
+
+    <script>
+        (function(){
+            // Load lucide from local static/vendor first, fallback to CDN if missing or errored.
+            function loadScript(src, onload){
+                var s = document.createElement('script');
+                s.src = src; s.async = false; s.onload = onload || function(){};
+                document.head.appendChild(s);
+                return s;
+            }
+
+            var localSrc = "{% static 'vendor/lucide.min.js' %}";
+            var cdnSrc = 'https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js';
+
+            var local = loadScript(localSrc, function(){
+                if (window.lucide && lucide.createIcons) lucide.createIcons();
+            });
+            local.onerror = function(){ loadScript(cdnSrc, function(){ if (window.lucide && lucide.createIcons) lucide.createIcons(); }); };
+
+            // Fonts: if DM Sans is not available, load Google Fonts as fallback
+            try {
+                if (document.fonts && document.fonts.check) {
+                    if (!document.fonts.check('12px "DM Sans"')) {
+                        var l = document.createElement('link');
+                        l.rel = 'stylesheet';
+                        l.href = 'https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap';
+                        document.head.appendChild(l);
+                    }
+                } else {
+                    // older browsers: load fallback after short delay
+                    setTimeout(function(){
+                        var l2 = document.createElement('link'); l2.rel='stylesheet';
+                        l2.href='https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap';
+                        document.head.appendChild(l2);
+                    }, 500);
+                }
+            } catch (e) { /* ignore */ }
+        })();
+    </script>
     
     <style>
         @keyframes fadeUp {
@@ -31,7 +69,7 @@
         </div>
     </main>
     
-    <script>lucide.createIcons();</script>
+    <script>if (typeof lucide !== 'undefined' && lucide.createIcons) lucide.createIcons();</script>
     {% block extra_js %}{% endblock %}
 </body>
 </html>

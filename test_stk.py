@@ -1,9 +1,7 @@
 import os
 import django
-from dotenv import load_dotenv
 
 # 1. Setup Django & Env
-load_dotenv()
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'core.settings')
 django.setup()
 
@@ -13,8 +11,9 @@ from payments.models import Invoice
 def run_test():
     client = MpesaClient()
     
-    # Target your phone number (Format: 2547XXXXXXXX)
-    phone = "254795285363" 
+    # Target your phone number (Format: 2547XXXXXXXX) - set via env for safety
+    from decouple import config
+    phone = config('TEST_PHONE', default='2547XXXXXXXX')
     
     # 2. Get the latest invoice from your seeded data
     try:
@@ -28,8 +27,9 @@ def run_test():
         amount = 1
         reference = "TEST001"
 
-    # 3. Trigger the Push using your Ngrok URL from earlier
-    callback_url = "https://6f85-41-90-144-8.ngrok-free.app/payments/callback/"
+    # 3. Trigger the Push using your public callback URL (from env)
+    from decouple import config
+    callback_url = config('MPESA_CALLBACK_URL', default='http://localhost:8000' + '/payments/callback/')
     
     response = client.stk_push(
         phone=phone,

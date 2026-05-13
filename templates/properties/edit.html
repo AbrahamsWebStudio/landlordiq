@@ -22,8 +22,9 @@
             {% include "components/forms/textarea.html" with label="Address" name="address" value=property.address required=True %}
 
             {% include "components/forms/select.html" with label="Status" name="status" selected=property.status options=status_options %}
-            
-            {% include "components/forms/actions.html" with submit_text="Update Property" cancel_url="/properties/{{ property.id }}/" %}
+
+            {% url 'properties:property_detail' property.id as detail_url %}
+            {% include "components/forms/actions.html" with submit_text="Update Property" cancel_url=detail_url %}
         </form>
 
     </div>

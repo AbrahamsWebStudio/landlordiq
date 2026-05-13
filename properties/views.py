@@ -4,6 +4,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.db.models import Sum
 from datetime import date
+from django.urls import reverse
 
 from .models import Property, Unit
 from tenants.models import Lease
@@ -51,9 +52,9 @@ def property_list(request):
     ]
     
     breadcrumbs = [
-    {"label": "Home", "url": "/"},
-    {"label": "Properties", "url": None},
-]
+        {"label": "Home", "url": reverse('home')},
+        {"label": "Properties", "url": None},
+    ]
 
     return render(request, 'properties/list.html', {
         'breadcrumbs': breadcrumbs,
@@ -72,8 +73,8 @@ def property_detail(request, property_id):
     today = date.today()
     
     breadcrumbs = [
-        {"label": "Home", "url": "/"},
-        {"label": "Properties", "url": "/properties/"},
+        {"label": "Home", "url": reverse('home')},
+        {"label": "Properties", "url": reverse('properties:property_list')},
         {"label": property_obj.name, "url": None},
     ]
     
@@ -101,14 +102,15 @@ def property_add(request):
         )
         return HttpResponseRedirect(reverse('properties:property_detail', args=[prop.id]))
     breadcrumbs = [
-        {"label": "Home", "url": "/"},
-        {"label": "Properties", "url": "/properties/"},
+        {"label": "Home", "url": reverse('home')},
+        {"label": "Properties", "url": reverse('properties:property_list')},
         {"label": "Add Property", "url": None},
     ]
 
     return render(request, 'properties/add.html', {
         'today': date.today(),
         'breadcrumbs': breadcrumbs,
+        'cancel_url': reverse('properties:property_list'),
     })
 
 @login_required
@@ -124,8 +126,8 @@ def property_edit(request, property_id):
         return redirect('properties:property_detail', property_id=prop.id)
 
     breadcrumbs = [
-        {"label": "Home", "url": "/"},
-        {"label": "Properties", "url": "/properties/"},
+        {"label": "Home", "url": reverse('home')},
+        {"label": "Properties", "url": reverse('properties:property_list')},
         {"label": "Edit Property", "url": None},
     ]
     status_options = [
