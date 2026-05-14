@@ -101,10 +101,10 @@ def tenant_list(request):
     occupancy_rate = round((occupied_units / total_units * 100) if total_units > 0 else 0)
     
     stats = [
-        {'icon': 'users', 'icon_color': '#2D5A27', 'value': tenants.count(), 'label': 'Total Tenants', 'trend': '+3 this month', 'trend_color': '#4CAF50'},
-        {'icon': 'file-text', 'icon_color': '#2D5A27', 'value': active_leases_count, 'label': 'Active Leases', 'trend': f'{occupancy_rate}% occupancy', 'trend_color': '#4CAF50'},
-        {'icon': 'alert-circle', 'icon_color': '#e63946', 'value': overdue_payments_count, 'label': 'Overdue Payments', 'trend': 'Require attention', 'trend_color': '#e63946'},
-        {'icon': 'clock', 'icon_color': '#f4a261', 'value': expiring_leases_count, 'label': 'Leases Expiring', 'trend': 'Next 30 days', 'trend_color': '#f4a261'},
+        {'icon': 'users', 'icon_color': 'text-brand', 'value': tenants.count(), 'label': 'Total Tenants', 'trend': '+3 this month', 'trend_color': 'text-ui-success'},
+        {'icon': 'file-text', 'icon_color': 'text-brand', 'value': active_leases_count, 'label': 'Active Leases', 'trend': f'{occupancy_rate}% occupancy', 'trend_color': 'text-ui-success'},
+        {'icon': 'alert-circle', 'icon_color': 'text-ui-danger', 'value': overdue_payments_count, 'label': 'Overdue Payments', 'trend': 'Require attention', 'trend_color': 'text-ui-danger'},
+        {'icon': 'clock', 'icon_color': 'text-ui-warning', 'value': expiring_leases_count, 'label': 'Leases Expiring', 'trend': 'Next 30 days', 'trend_color': 'text-ui-warning'},
     ]
     
     table_columns = ['TENANT', 'CONTACT', 'UNIT', 'RENT', 'LEASE', 'PAYMENT']

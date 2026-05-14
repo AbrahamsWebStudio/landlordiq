@@ -122,7 +122,7 @@ def dashboard(request):
             "label": m_start.strftime('%b'),
             "value": value_display,
             "height": f"{height_percent}%",
-            "color": "#4CAF50" if is_current else "#2D5A27",
+            "color": "bg-ui-success" if is_current else "bg-brand",
         })
     
     # Calculate expiring leases

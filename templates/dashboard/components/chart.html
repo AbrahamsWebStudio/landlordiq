@@ -4,7 +4,7 @@
     <div class="flex items-end justify-between gap-3" style="height: 200px;">
         {% for bar in bars %}
         <div class="flex flex-col items-center flex-1">
-            <div class="w-full rounded-t transition hover:opacity-80" style="background: {{ bar.color }}; height: {{ bar.height }};"></div>
+            <div class="w-full rounded-t transition hover:opacity-80 {% if not bar.color|slice:":1" == '#' %}{{ bar.color }}{% endif %}" {% if bar.color|slice:":1" == '#' %}style="background: {{ bar.color }};"{% endif %} style="height: {{ bar.height }};"></div>
             <span class="text-xs text-gray-500 mt-2">{{ bar.label }}</span>
             <span class="text-xs font-medium text-gray-600 mt-1">{{ bar.value }}</span>
         </div>
