@@ -65,6 +65,10 @@
     {% include "components/mobile_bottom_nav.html" %}
     {% include "components/action_sheet.html" %}
     
+    <!-- CSRF Token for JavaScript -->
+    <script>
+        window.csrfToken = '{{ csrf_token }}';
+    </script>
     <main class="lg:ml-64">
         {% include "components/topbar.html" %}
         <div class="p-4 lg:p-6"><div class="max-w-7xl mx-auto">
@@ -74,5 +78,6 @@
     
     <script>if (typeof lucide !== 'undefined' && lucide.createIcons) lucide.createIcons();</script>
     {% block extra_js %}{% endblock %}
+    {% include "components/delete_modal.html" %}
 </body>
 </html>

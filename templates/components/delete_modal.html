@@ -1,0 +1,116 @@
+{% load static %}
+
+<div id="deleteModal" class="hidden fixed inset-0 z-50 items-center justify-center p-4" style="background: rgba(10, 31, 10, 0.95);">
+    <div class="bg-white rounded-xl max-w-md w-full p-6 shadow-2xl transform transition-all duration-300 scale-95 opacity-0" id="deleteModalContent">
+        <div class="text-center">
+            <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <i data-lucide="alert-triangle" class="w-8 h-8 text-red-600"></i>
+            </div>
+            <h3 class="text-xl font-bold text-gray-800 mb-2">Delete <span id="deleteItemTypeText">Item</span></h3>
+            <p class="text-gray-600 mb-2">
+                Are you sure you want to delete <strong class="text-red-600" id="deleteItemName"></strong>?
+            </p>
+            <p class="text-sm text-gray-500 mb-6">This action cannot be undone.</p>
+            
+            <div class="flex flex-col sm:flex-row gap-3">
+                <button onclick="closeDeleteModal()" 
+                        class="px-4 py-2 rounded-lg text-sm font-medium border border-gray-300 text-gray-700 hover:bg-gray-50 transition-all duration-200">
+                    Cancel
+                </button>
+                <form id="deleteForm" method="POST" class="flex-1">
+                    {% csrf_token %}
+                    <button type="submit" 
+                            class="bg-ui-danger text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-ui-danger/10 transition">
+                        <i data-lucide="trash-2" class="w-4 h-4 inline mr-1"></i>
+                        Yes, Delete
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+let deleteCallback = null;
+
+function showDeleteModal(itemType, itemName, deleteUrl, onSuccess) {
+    const modal = document.getElementById('deleteModal');
+    const content = document.getElementById('deleteModalContent');
+    const itemTypeText = document.getElementById('deleteItemTypeText');
+    const itemNameSpan = document.getElementById('deleteItemName');
+    const deleteForm = document.getElementById('deleteForm');
+    
+    itemTypeText.textContent = itemType;
+    itemNameSpan.textContent = itemName;
+    deleteForm.action = deleteUrl;
+    deleteCallback = onSuccess;
+    
+    modal.style.display = 'flex';
+    setTimeout(() => {
+        content.classList.remove('scale-95', 'opacity-0');
+        content.classList.add('scale-100', 'opacity-100');
+    }, 10);
+    lucide.createIcons();
+}
+
+function closeDeleteModal() {
+    const modal = document.getElementById('deleteModal');
+    const content = document.getElementById('deleteModalContent');
+    content.classList.remove('scale-100', 'opacity-100');
+    content.classList.add('scale-95', 'opacity-0');
+    setTimeout(() => {
+        modal.style.display = 'none';
+    }, 200);
+    deleteCallback = null;
+}
+
+document.getElementById('deleteForm')?.addEventListener('submit', function(e) {
+    if (deleteCallback) {
+        e.preventDefault();
+        const submitBtn = this.querySelector('button[type="submit"]');
+        const originalText = submitBtn.innerHTML;
+        submitBtn.innerHTML = '<i data-lucide="loader" class="w-4 h-4 inline mr-1 animate-spin"></i> Deleting...';
+        submitBtn.disabled = true;
+        
+        fetch(this.action, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]')?.value || '{{ csrf_token }}',
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            credentials: 'same-origin'
+        })
+        .then(response => {
+            if (response.ok) {
+                closeDeleteModal();
+                if (deleteCallback) deleteCallback();
+            } else {
+                return response.json().then(data => {
+                    throw new Error(data.error || 'Delete failed');
+                });
+            }
+        })
+        .catch(error => {
+            alert(error.message);
+            submitBtn.innerHTML = originalText;
+            submitBtn.disabled = false;
+            lucide.createIcons();
+        });
+    }
+});
+
+// Close on outside click
+document.getElementById('deleteModal')?.addEventListener('click', function(e) {
+    if (e.target === this) closeDeleteModal();
+});
+</script>
+
+<style>
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+.animate-spin {
+    animation: spin 1s linear infinite;
+}
+</style>

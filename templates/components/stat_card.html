@@ -1,10 +1,10 @@
 <div class="bg-white rounded-xl p-5 shadow-sm">
     <div class="mb-2">
-        <i data-lucide="{{ icon }}" class="w-5 h-5" style="color: {{ icon_color|default:'#2D5A27' }};"></i>
+        <i data-lucide="{{ icon }}" class="w-5 h-5 {{ icon_color|default:'text-brand' }}"></i>
     </div>
     <p class="text-2xl font-bold text-gray-800">{{ value }}</p>
     <p class="text-sm text-gray-500">{{ label }}</p>
     {% if trend %}
-    <p class="text-xs mt-1" style="color: {{ trend_color|default:'#4CAF50' }};">{{ trend }}</p>
+    <p class="text-xs mt-1 {{ trend_color|default:'text-ui-success' }}">{{ trend }}</p>
     {% endif %}
 </div>

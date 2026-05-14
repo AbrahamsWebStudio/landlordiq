@@ -22,6 +22,16 @@ module.exports = {
     'shadow-card',
     'shadow-card-hover',
     'shadow-dropdown',
+    'bg-brand',
+    'hover:bg-brand-dark',
+    'bg-brand-deep',
+    'bg-brand-muted',
+    'border-brand-muted',
+    'text-brand',
+    'focus:ring-brand',
+    'focus:border-brand',
+    'hover:bg-brand/30',
+    'hover:bg-brand-muted/20',
   ],
   theme: {
     extend: {
@@ -38,6 +48,11 @@ module.exports = {
         'ui-danger': '#e63946',
         'ui-warning': '#f4a261',
         'ui-info': '#175281',
+        // Brand tokens (aligned with existing template usage)
+        'brand': '#2D5A27',
+        'brand-dark': '#1e3a1e',
+        'brand-muted': '#3A6B35',
+        'brand-deep': '#142E14',
       },
       fontSize: {
         'heading-1': ['36px', { lineHeight: '44px', fontWeight: '700' }],

@@ -1,24 +1,24 @@
 <div id="actionSheet" class="hidden fixed inset-0 z-50 flex items-end" style="background: rgba(10, 31, 10, 0.95);">
-    <div class="w-full bg-[#142E14] rounded-t-3xl p-6 pt-4 animate-slide-up">
+    <div class="w-full bg-brand-deep rounded-t-3xl p-6 pt-4 animate-slide-up">
         <div class="flex justify-center mb-4">
-            <div class="w-10 h-1 bg-[#3A6B35] rounded-full"></div>
+            <div class="w-10 h-1 bg-brand-muted rounded-full"></div>
         </div>
         <h2 class="text-center text-white font-bold text-xl mb-1">Manage Overdue Rent</h2>
-        <p id="actionSheetSubtitle" class="text-center text-[#a3c9a0] text-sm mb-6">Loading...</p>
+        <p id="actionSheetSubtitle" class="text-center text-text-muted text-sm mb-6">Loading...</p>
         
         <div class="space-y-3">
-            <button id="sendReminderBtn" class="btn-press w-full h-14 rounded-xl flex items-center justify-center gap-3 font-medium text-base bg-[#2D5A27] text-white hover:brightness-110 transition">
+            <button id="sendReminderBtn" class="btn-press w-full h-14 rounded-xl flex items-center justify-center gap-3 font-medium text-base bg-brand text-white hover:brightness-110 transition">
                 <i data-lucide="message-circle" class="w-5 h-5"></i> Send Reminder
             </button>
-            <button id="callTenantBtn" class="btn-press w-full h-14 rounded-xl flex items-center justify-center gap-3 font-medium text-base border border-[#3A6B35] bg-transparent text-white hover:bg-[#3A6B35]/20 transition">
+            <button id="callTenantBtn" class="btn-press w-full h-14 rounded-xl flex items-center justify-center gap-3 font-medium text-base border border-brand-muted bg-transparent text-white hover:bg-brand-muted/20 transition">
                 <i data-lucide="phone" class="w-5 h-5"></i> Call Tenant
             </button>
-            <button id="viewLedgerBtn" class="btn-press w-full h-14 rounded-xl flex items-center justify-center gap-3 font-medium text-base border border-[#3A6B35] bg-transparent text-white hover:bg-[#3A6B35]/20 transition">
+            <button id="viewLedgerBtn" class="btn-press w-full h-14 rounded-xl flex items-center justify-center gap-3 font-medium text-base border border-brand-muted bg-transparent text-white hover:bg-brand-muted/20 transition">
                 <i data-lucide="book-open" class="w-5 h-5"></i> View Ledger
             </button>
         </div>
         <div class="mt-5 text-center">
-            <button id="closeSheetBtn" class="bg-transparent text-[#a3c9a0] text-sm hover:text-white transition btn-press">Close</button>
+            <button id="closeSheetBtn" class="bg-transparent text-text-muted text-sm hover:text-white transition btn-press">Close</button>
         </div>
     </div>
 </div>

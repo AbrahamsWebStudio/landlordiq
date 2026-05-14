@@ -18,6 +18,8 @@
 
             {% include "components/forms/textarea.html" with label="Address" name="address" required=True %}
 
+            {% include "components/forms/select.html" with label="Status" name="status" options=status_options %}
+
             {% include "components/forms/actions.html" with submit_text="Save Property" cancel_url=cancel_url %}        </form>
     </div>
 </div>

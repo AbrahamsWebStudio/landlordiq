@@ -1,24 +1,24 @@
 <div id="propertyActionSheet" class="hidden fixed inset-0 z-50 flex items-end" style="background: rgba(10, 31, 10, 0.95);">
-    <div class="w-full bg-brand-deep rounded-t-3xl p-6 pt-4 animate-slide-up">
+    <div class="w-full bg-[#142E14] rounded-t-3xl p-6 pt-4 animate-slide-up">
         <div class="flex justify-center mb-4">
-            <div class="w-10 h-1 bg-brand-muted rounded-full"></div>
+            <div class="w-10 h-1 bg-[#3A6B35] rounded-full"></div>
         </div>
         <h2 class="text-center text-white font-bold text-xl mb-1">Manage Property</h2>
-        <p id="propertySheetSubtitle" class="text-center text-text-muted text-sm mb-6">Loading...</p>
+        <p id="propertySheetSubtitle" class="text-center text-[#a3c9a0] text-sm mb-6">Loading...</p>
         
         <div class="space-y-3">
-            <a id="propertyViewDetailsBtn" href="#" class="btn-press w-full h-14 rounded-xl flex items-center justify-center gap-3 font-medium text-base bg-brand text-white hover:brightness-110 transition">
+            <a id="propertyViewDetailsBtn" href="#" class="btn-press w-full h-14 rounded-xl flex items-center justify-center gap-3 font-medium text-base bg-[#2D5A27] text-white hover:brightness-110 transition">
                 <i data-lucide="eye" class="w-5 h-5"></i> View Details
             </a>
-            <a id="propertyEditBtn" href="#" class="btn-press w-full h-14 rounded-xl flex items-center justify-center gap-3 font-medium text-base border border-brand-muted bg-transparent text-white hover:bg-brand-muted/20 transition">
+            <a id="propertyEditBtn" href="#" class="btn-press w-full h-14 rounded-xl flex items-center justify-center gap-3 font-medium text-base border border-[#3A6B35] bg-transparent text-white hover:bg-[#3A6B35]/20 transition">
                 <i data-lucide="edit" class="w-5 h-5"></i> Edit Property
             </a>
-            <button id="propertyDeleteBtn" class="btn-press w-full h-14 rounded-xl flex items-center justify-center gap-3 font-medium text-base border border-ui-danger/30 bg-transparent text-ui-danger hover:bg-ui-danger/10 transition">
+            <button id="propertyDeleteBtn" class="btn-press w-full h-14 rounded-xl flex items-center justify-center gap-3 font-medium text-base border border-red-500/30 bg-transparent text-red-400 hover:bg-red-500/10 transition">
                 <i data-lucide="trash-2" class="w-5 h-5"></i> Delete Property
             </button>
         </div>
         <div class="mt-5 text-center">
-            <button onclick="closePropertySheet()" class="bg-transparent text-text-muted text-sm hover:text-white transition btn-press">Close</button>
+            <button onclick="closePropertySheet()" class="bg-transparent text-[#a3c9a0] text-sm hover:text-white transition btn-press">Close</button>
         </div>
     </div>
 </div>

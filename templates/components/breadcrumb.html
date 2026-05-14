@@ -7,12 +7,12 @@
         {% endif %}
 
         {% if crumb.url %}
-            <a href="{{ crumb.url }}"
-               class="text-gray-500 hover:text-[#2D5A27] transition">
+                <a href="{{ crumb.url }}"
+                    class="text-gray-500 hover:text-brand transition">
                 {{ crumb.label }}
             </a>
         {% else %}
-            <span class="text-[#2D5A27] font-medium">
+            <span class="text-brand font-medium">
                 {{ crumb.label }}
             </span>
         {% endif %}
