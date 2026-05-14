@@ -50,10 +50,10 @@ def property_list(request):
     ).aggregate(total=Sum('monthly_rent'))['total'] or 0
     
     stats = [
-        {'icon': 'building', 'icon_color': '#2D5A27', 'value': properties.count(), 'label': 'Total Properties'},
-        {'icon': 'home', 'icon_color': '#2D5A27', 'value': total_units, 'label': 'Total Units'},
-        {'icon': 'users', 'icon_color': '#4CAF50', 'value': occupied_units, 'label': 'Occupied Units', 'trend': f'{occupancy_rate}% occupied', 'trend_color': '#4CAF50'},
-        {'icon': 'trending-up', 'icon_color': '#4CAF50', 'value': f"KES {int(monthly_revenue):,}", 'label': 'Monthly Revenue'},
+        {'icon': 'building', 'icon_color': 'text-brand', 'value': properties.count(), 'label': 'Total Properties'},
+        {'icon': 'home', 'icon_color': 'text-brand', 'value': total_units, 'label': 'Total Units'},
+        {'icon': 'users', 'icon_color': 'text-ui-success', 'value': occupied_units, 'label': 'Occupied Units', 'trend': f'{occupancy_rate}% occupied', 'trend_color': 'text-ui-success'},
+        {'icon': 'trending-up', 'icon_color': 'text-ui-success', 'value': f"KES {int(monthly_revenue):,}", 'label': 'Monthly Revenue'},
     ]
     
     breadcrumbs = [
